@@ -1,16 +1,17 @@
-[gd_scene load_steps=15 format=3 uid="uid://bygaenv1mocd"]
+[gd_scene load_steps=16 format=3 uid="uid://bygaenv1mocd"]
 
 [ext_resource type="Texture2D" uid="uid://bux46v0l8h3v" path="res://assets/textures/track.png" id="1_skapx"]
 [ext_resource type="PackedScene" uid="uid://d04nf8g18nl8i" path="res://track/straight.tscn" id="2_k80s0"]
 [ext_resource type="Script" path="res://engine/train.gd" id="3_oxtjv"]
 [ext_resource type="PackedScene" uid="uid://syxvvl0wtx0d" path="res://track/curve.tscn" id="3_tcrg8"]
+[ext_resource type="PackedScene" uid="uid://cc8orcvajin1w" path="res://assets/Models/FBX format/train-diesel-a.fbx" id="5_5nlb3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lbsai"]
 albedo_color = Color(0.380392, 1, 0.192157, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0cb86"]
 material = SubResource("StandardMaterial3D_lbsai")
-size = Vector2(20, 20)
+size = Vector2(50, 50)
 
 [sub_resource type="Curve3D" id="Curve3D_gaqd5"]
 _data = {
@@ -22,6 +23,9 @@ point_count = 10
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7kaxg"]
 albedo_texture = ExtResource("1_skapx")
 uv1_scale = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_s8k1f"]
+size = Vector3(1.2, 0.8, 0.5)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5tihv"]
 sky_top_color = Color(0.675969, 0.306514, 0.90577, 1)
@@ -37,9 +41,6 @@ sky_material = SubResource("ProceduralSkyMaterial_5tihv")
 [sub_resource type="Environment" id="Environment_g35y3"]
 background_mode = 2
 sky = SubResource("Sky_gr5dh")
-
-[sub_resource type="BoxMesh" id="BoxMesh_s8k1f"]
-size = Vector3(1.2, 0.8, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8pfsl"]
 albedo_color = Color(1, 0, 1, 1)
@@ -74,12 +75,25 @@ path_u_distance = 1.0
 path_joined = false
 
 [node name="TestTrack(Pieces)" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3)
 
-[node name="Straight" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+[node name="Straight6" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+transform = Transform3D(-2.98023e-08, 0, -1, 0, 1, 0, 1, 0, -2.98023e-08, -1.9, 0, 10)
 
-[node name="Straight2" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+[node name="Straight7" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+transform = Transform3D(-2.98023e-08, 0, -1, 0, 1, 0, 1, 0, -2.98023e-08, 6, 0, 6)
+
+[node name="Straight5" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.9, 0, 4)
+
+[node name="Straight8" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 12)
+
+[node name="Straight9" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 16)
+
+[node name="Straight10" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1, 0, 16)
 
 [node name="Straight3" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
 
@@ -89,30 +103,51 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.9, 0, 0)
 [node name="Curve" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
+[node name="Curve4" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1, 0, 14)
+
+[node name="Curve6" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 10)
+
 [node name="Curve2" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.9, 0, -6)
 
+[node name="Curve7" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
+transform = Transform3D(-1, 0, -9.68575e-08, 0, 1, 0, 9.68575e-08, 0, -1, 4.1, 0, 17.9)
+
+[node name="Curve8" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
+transform = Transform3D(1.41561e-07, 0, -1, 0, 1, 0, 1, 0, 1.41561e-07, 8, 0, 21.9)
+
+[node name="Curve3" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -7.9, 0, 6)
+
+[node name="Curve5" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 2)
+
 [node name="TestTrain" type="Node3D" parent="." node_paths=PackedStringArray("debug_node")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 9.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -3.5)
 script = ExtResource("3_oxtjv")
 sampling_delay = 10
-movement_multiplier = 1.0
-train_height = 0.8
+movement_multiplier = 5.0
 debug_node = NodePath("../DebugNode")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTrain"]
+transform = Transform3D(1, 0, 0, 0, 0.6, 0, 0, 0, 0.7, 0, 0, 0)
+visible = false
+mesh = SubResource("BoxMesh_s8k1f")
+
+[node name="train-diesel-a" parent="TestTrain" instance=ExtResource("5_5nlb3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
 [node name="CameraPivot" type="Node3D" parent="TestTrain"]
-transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 2, 1.55185, 1.71745)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2)
 
 [node name="Camera3D" type="Camera3D" parent="TestTrain/CameraPivot"]
-transform = Transform3D(0.984808, 0.062063, -0.162179, 2.94209e-15, 0.933949, 0.357406, 0.173648, -0.351977, 0.91976, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1, 2)
 environment = SubResource("Environment_g35y3")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="TestTrain/CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.780474, 0.625188, 0, -0.625188, 0.780474, 0, 1.47797, 3.77713)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTrain"]
-transform = Transform3D(1, 0, 0, 0, 0.6, 0, 0, 0, 0.7, 0, 0, 0)
-mesh = SubResource("BoxMesh_s8k1f")
 
 [node name="DebugNode" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_8pfsl")

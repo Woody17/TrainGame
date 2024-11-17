@@ -7,6 +7,7 @@ class_name Train
 @export var movement_multiplier: float = 0.1
 @export var train_height: float = 1
 @export var debug_node: Node3D
+@export var invert_direction: bool 
 
 # Internal State
 var sample_count = 0
@@ -25,10 +26,12 @@ func _physics_process(delta: float) -> void:
 		var moveDir = 1
 		if backwards_piece:
 			moveDir = -1
-		current_track_offset += ((moveDir * movement_multiplier) * delta)
+		var move_amount =  ((moveDir * movement_multiplier) * delta)
+		current_track_offset += move_amount
 		# Align to track
 		newPosition = current_track.getPositionAtOffset(current_track_offset) + Vector3(0, train_height / 2, 0)
-		look_at(newPosition, Vector3.UP)
+		if not global_transform.origin.is_equal_approx(newPosition):
+			look_at(newPosition)
 		global_position = newPosition
 	# We don't sample for new track every frame
 	if sample_count < sampling_delay:
@@ -44,7 +47,8 @@ func _physics_process(delta: float) -> void:
 	# We look for the next track an extra move ahead
 	query.from = newPosition
 	query.to = query.from + Vector3(0, -1, 0)
-	debug_node.global_position = query.to
+	if debug_node:
+		debug_node.global_position = query.to
 	# Exclude our recent track
 	query.exclude = last_track_rids
 	var result = space.intersect_ray(query)
@@ -53,12 +57,19 @@ func _physics_process(delta: float) -> void:
 		var track = area.get_parent_node_3d()
 		if track and track is TrackPiece:
 			if current_track != track:
+				var force_forward = false;
 				if current_track:
 					current_track.willLeaveTrackPiece()
+				else:
+					# This is our first "placement" onto a track
+					# so we assume we want to move forward
+					force_forward = true
 				current_track = track as TrackPiece
 				current_track.willEnterTrackPiece()
 				current_track_offset = current_track.getInitialTrackOffset(global_position)
 				backwards_piece = current_track_offset > current_track.getTrackLength() / 2
+				if force_forward:
+					backwards_piece = invert_direction
 				recordLastTrackRID(current_track.getAreaRID())
 				
 func recordLastTrackRID(rid: RID):
