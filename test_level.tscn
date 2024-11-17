@@ -1,0 +1,119 @@
+[gd_scene load_steps=15 format=3 uid="uid://bygaenv1mocd"]
+
+[ext_resource type="Texture2D" uid="uid://bux46v0l8h3v" path="res://assets/textures/track.png" id="1_skapx"]
+[ext_resource type="PackedScene" uid="uid://d04nf8g18nl8i" path="res://track/straight.tscn" id="2_k80s0"]
+[ext_resource type="Script" path="res://engine/train.gd" id="3_oxtjv"]
+[ext_resource type="PackedScene" uid="uid://syxvvl0wtx0d" path="res://track/curve.tscn" id="3_tcrg8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lbsai"]
+albedo_color = Color(0.380392, 1, 0.192157, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0cb86"]
+material = SubResource("StandardMaterial3D_lbsai")
+size = Vector2(20, 20)
+
+[sub_resource type="Curve3D" id="Curve3D_gaqd5"]
+_data = {
+"points": PackedVector3Array(1.83572, 0.688586, -3.05669, -1.836, 0, 3.057, 6.563, 0, 3.146, 0.103, 0, 1.519, -0.103, 0, -1.519, 1.006, 0, 2.48, 1.057, 0, 1.536, -1.057, 0, -1.536, -3.573, 0, 1.684, 0.313, 0, 1.339, -0.313, 0, -1.339, -4.051, 0, -1.335, -1.145, 0, 2.541, 1.145, 0, -2.541, -6.171, 0, -6.749, -2.641, 0, 1.22, 2.641, 0, -1.22, -0.503, 0, -9.283, 0.209, 0, -2.95, -0.209, 0, 2.95, 3.34, 0, -7.03, -1.57, 0, -1.644, 1.57, 0, 1.644, 6.193, 0, -3.519, -0.185, 0, -2.609, 0.185, 0, 2.609, 9.811, 0, 0.118, 1.836, 0, -3.057, -1.83572, -0.688586, 3.05669, 6.563, 0, 3.146),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 10
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7kaxg"]
+albedo_texture = ExtResource("1_skapx")
+uv1_scale = Vector3(2, 2, 2)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5tihv"]
+sky_top_color = Color(0.675969, 0.306514, 0.90577, 1)
+sky_horizon_color = Color(1, 0.681029, 0.208259, 1)
+sky_curve = 0.01875
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+ground_curve = 41943.0
+
+[sub_resource type="Sky" id="Sky_gr5dh"]
+sky_material = SubResource("ProceduralSkyMaterial_5tihv")
+
+[sub_resource type="Environment" id="Environment_g35y3"]
+background_mode = 2
+sky = SubResource("Sky_gr5dh")
+
+[sub_resource type="BoxMesh" id="BoxMesh_s8k1f"]
+size = Vector3(1.2, 0.8, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8pfsl"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_u7das"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_0cb86")
+
+[node name="TestTrack(Path)" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
+visible = false
+
+[node name="Path3D" type="Path3D" parent="TestTrack(Path)"]
+curve = SubResource("Curve3D_gaqd5")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="TestTrack(Path)"]
+material_override = SubResource("StandardMaterial3D_7kaxg")
+polygon = PackedVector2Array(0, 0, 0, 0.02, 1, 0.01, 1, 0.01)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="TestTrack(Pieces)" type="Node3D" parent="."]
+
+[node name="Straight" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="Straight2" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="Straight3" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+
+[node name="Straight4" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.9, 0, 0)
+
+[node name="Curve" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Curve2" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.9, 0, -6)
+
+[node name="TestTrain" type="Node3D" parent="." node_paths=PackedStringArray("debug_node")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 9.6)
+script = ExtResource("3_oxtjv")
+sampling_delay = 10
+movement_multiplier = 1.0
+train_height = 0.8
+debug_node = NodePath("../DebugNode")
+
+[node name="CameraPivot" type="Node3D" parent="TestTrain"]
+transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 2, 1.55185, 1.71745)
+
+[node name="Camera3D" type="Camera3D" parent="TestTrain/CameraPivot"]
+transform = Transform3D(0.984808, 0.062063, -0.162179, 2.94209e-15, 0.933949, 0.357406, 0.173648, -0.351977, 0.91976, 0, 0, 0)
+environment = SubResource("Environment_g35y3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="TestTrain/CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.780474, 0.625188, 0, -0.625188, 0.780474, 0, 1.47797, 3.77713)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTrain"]
+transform = Transform3D(1, 0, 0, 0, 0.6, 0, 0, 0, 0.7, 0, 0, 0)
+mesh = SubResource("BoxMesh_s8k1f")
+
+[node name="DebugNode" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_8pfsl")
+mesh = SubResource("BoxMesh_u7das")

@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://d04nf8g18nl8i"]
+
+[ext_resource type="Script" path="res://engine/track_piece.gd" id="1_juhhd"]
+[ext_resource type="PackedScene" uid="uid://bwmqf2ety8sft" path="res://assets/Models/FBX format/railroad-straight.fbx" id="2_4jd68"]
+
+[sub_resource type="Curve3D" id="Curve3D_6a4ya"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.0155552, 0.0774997, 2.10846, 0, 0, 0, 0, 0, 0, -0.00805385, 0.0975964, -2.14184),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oqdxw"]
+size = Vector3(1, 0.4, 4)
+
+[node name="Straight" type="Node3D" node_paths=PackedStringArray("path", "area")]
+script = ExtResource("1_juhhd")
+path = NodePath("Path3D")
+area = NodePath("Area3D")
+
+[node name="railroad-straight" parent="." instance=ExtResource("2_4jd68")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_6a4ya")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("BoxShape3D_oqdxw")
