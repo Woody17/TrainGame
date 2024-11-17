@@ -23,3 +23,12 @@ func getTrackLength() -> float:
 
 func getPositionAtOffset(offset: float) -> Vector3:
 	return path.to_global(path.curve.sample_baked(offset))
+
+func getTrackPosition(position: Vector3) -> Vector3:
+	var local_pos = path.to_local(position)
+	return path.to_global(path.curve.get_closest_point(local_pos))
+
+func getUpTrackPosition(position: Vector3, forward: Vector3) -> Vector3:
+	var offset = getInitialTrackOffset(position)
+	var upstreamOffset = getInitialTrackOffset(position + (forward * 2))
+	return getPositionAtOffset(upstreamOffset)

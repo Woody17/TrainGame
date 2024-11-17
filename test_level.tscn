@@ -51,6 +51,7 @@ size = Vector3(0.1, 0.1, 0.1)
 [node name="Node3D" type="Node3D"]
 
 [node name="Ground" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("PlaneMesh_0cb86")
 
 [node name="TestTrack(Path)" type="Node3D" parent="."]
@@ -124,12 +125,10 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -7.9, 
 [node name="Curve5" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 2)
 
-[node name="TestTrain" type="Node3D" parent="." node_paths=PackedStringArray("debug_node")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -3.5)
+[node name="TestTrain" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.5)
 script = ExtResource("3_oxtjv")
-sampling_delay = 10
-movement_multiplier = 5.0
-debug_node = NodePath("../DebugNode")
+train_height = 0.8
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="TestTrain"]
 transform = Transform3D(1, 0, 0, 0, 0.6, 0, 0, 0, 0.7, 0, 0, 0)
@@ -138,6 +137,7 @@ mesh = SubResource("BoxMesh_s8k1f")
 
 [node name="train-diesel-a" parent="TestTrain" instance=ExtResource("5_5nlb3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+visible = false
 
 [node name="CameraPivot" type="Node3D" parent="TestTrain"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2)
