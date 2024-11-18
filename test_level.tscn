@@ -1,6 +1,6 @@
-[gd_scene load_steps=20 format=3 uid="uid://bygaenv1mocd"]
+[gd_scene load_steps=18 format=3 uid="uid://bygaenv1mocd"]
 
-[ext_resource type="Texture2D" uid="uid://bux46v0l8h3v" path="res://assets/textures/track.png" id="1_skapx"]
+[ext_resource type="Script" path="res://state_manager.gd" id="1_dpqds"]
 [ext_resource type="PackedScene" uid="uid://d04nf8g18nl8i" path="res://track/straight.tscn" id="2_k80s0"]
 [ext_resource type="Script" path="res://engine/train.gd" id="3_oxtjv"]
 [ext_resource type="PackedScene" uid="uid://syxvvl0wtx0d" path="res://track/curve.tscn" id="3_tcrg8"]
@@ -8,25 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://cc8orcvajin1w" path="res://assets/Models/FBX format/train-diesel-a.fbx" id="5_5nlb3"]
 [ext_resource type="PackedScene" uid="uid://2rp0ogxeg4hp" path="res://assets/Models/FBX format/train-tram-round.fbx" id="6_q4uhd"]
 [ext_resource type="Script" path="res://engine/controller.gd" id="7_mvdlt"]
-[ext_resource type="Script" path="res://engine/free_cam.gd" id="8_g217m"]
+[ext_resource type="Script" path="res://engine/camera.gd" id="8_g217m"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lbsai"]
 albedo_color = Color(0.380392, 1, 0.192157, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0cb86"]
 material = SubResource("StandardMaterial3D_lbsai")
-size = Vector2(50, 50)
-
-[sub_resource type="Curve3D" id="Curve3D_gaqd5"]
-_data = {
-"points": PackedVector3Array(1.83572, 0.688586, -3.05669, -1.836, 0, 3.057, 6.563, 0, 3.146, 0.103, 0, 1.519, -0.103, 0, -1.519, 1.006, 0, 2.48, 1.057, 0, 1.536, -1.057, 0, -1.536, -3.573, 0, 1.684, 0.313, 0, 1.339, -0.313, 0, -1.339, -4.051, 0, -1.335, -1.145, 0, 2.541, 1.145, 0, -2.541, -6.171, 0, -6.749, -2.641, 0, 1.22, 2.641, 0, -1.22, -0.503, 0, -9.283, 0.209, 0, -2.95, -0.209, 0, 2.95, 3.34, 0, -7.03, -1.57, 0, -1.644, 1.57, 0, 1.644, 6.193, 0, -3.519, -0.185, 0, -2.609, 0.185, 0, 2.609, 9.811, 0, 0.118, 1.836, 0, -3.057, -1.83572, -0.688586, 3.05669, 6.563, 0, 3.146),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-}
-point_count = 10
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7kaxg"]
-albedo_texture = ExtResource("1_skapx")
-uv1_scale = Vector3(2, 2, 2)
+size = Vector2(1000, 1000)
 
 [sub_resource type="BoxMesh" id="BoxMesh_s8k1f"]
 size = Vector3(1.2, 0.8, 3.66)
@@ -52,34 +41,23 @@ sky_material = SubResource("ProceduralSkyMaterial_5tihv")
 background_mode = 2
 sky = SubResource("Sky_gr5dh")
 
-[node name="Node3D" type="Node3D"]
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("track_container", "camera", "play_controls")]
+script = ExtResource("1_dpqds")
+track_container = NodePath("TrackContainer")
+camera = NodePath("Camera")
+play_controls = NodePath("PlayControls")
 
 [node name="Ground" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_0cb86")
 
-[node name="TestTrack(Path)" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
-visible = false
+[node name="TrackContainer" type="Node3D" parent="."]
 
-[node name="Path3D" type="Path3D" parent="TestTrack(Path)"]
-curve = SubResource("Curve3D_gaqd5")
-
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="TestTrack(Path)"]
-material_override = SubResource("StandardMaterial3D_7kaxg")
-polygon = PackedVector2Array(0, 0, 0, 0.02, 1, 0.01, 1, 0.01)
-mode = 2
-path_node = NodePath("../Path3D")
-path_interval_type = 0
-path_interval = 1.0
-path_simplify_angle = 0.0
-path_rotation = 2
-path_local = false
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
+[node name="DefaultStraight" parent="TrackContainer" instance=ExtResource("2_k80s0")]
+transform = Transform3D(-2.98023e-08, 0, -1, 0, 1, 0, 1, 0, -2.98023e-08, -1.9, 0, 0.7)
 
 [node name="TestTrack(Pieces)" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3)
+visible = false
 
 [node name="Straight6" parent="TestTrack(Pieces)" instance=ExtResource("2_k80s0")]
 transform = Transform3D(-2.98023e-08, 0, -1, 0, 1, 0, 1, 0, -2.98023e-08, -1.9, 0, 10)
@@ -129,6 +107,7 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -7.9, 
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 2)
 
 [node name="TrainGroup" type="Node3D" parent="."]
+visible = false
 
 [node name="TestTrain" type="Node3D" parent="TrainGroup" node_paths=PackedStringArray("front_wheel", "back_wheel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -2.7)
@@ -163,22 +142,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.6)
 script = ExtResource("4_rfreo")
 
 [node name="Camera" type="Node3D" parent="."]
-transform = Transform3D(-0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, -0.906308, 8, 2.5, -8.8)
 script = ExtResource("8_g217m")
 
 [node name="Camera3D" type="Camera3D" parent="Camera"]
-transform = Transform3D(0.996195, 0.0435779, -0.0754791, 0, 0.866025, 0.5, 0.0871557, -0.498097, 0.86273, -4.76837e-07, 1, 2)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 0, 2)
 environment = SubResource("Environment_g35y3")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Camera"]
 transform = Transform3D(1, 0, 0, 0, 0.780474, 0.625188, 0, -0.625188, 0.780474, 0, 1.47797, 3.77713)
 
-[node name="Node2D" type="Node2D" parent="." node_paths=PackedStringArray("train", "slider")]
+[node name="PlayControls" type="Node2D" parent="." node_paths=PackedStringArray("train", "slider")]
 script = ExtResource("7_mvdlt")
 train = NodePath("../TrainGroup/TestTrain")
 slider = NodePath("VSlider")
 
-[node name="VSlider" type="VSlider" parent="Node2D"]
+[node name="VSlider" type="VSlider" parent="PlayControls"]
 offset_left = 3.0
 offset_top = 145.0
 offset_right = 102.0
@@ -186,4 +164,4 @@ offset_bottom = 533.0
 min_value = -10.0
 max_value = 10.0
 
-[connection signal="changed" from="Node2D/VSlider" to="TrainGroup/TestTrain" method="_on_v_slider_changed"]
+[connection signal="changed" from="PlayControls/VSlider" to="TrainGroup/TestTrain" method="_on_v_slider_changed"]

@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 # Can be used to control a train
 class_name Controller
