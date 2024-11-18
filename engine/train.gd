@@ -35,4 +35,3 @@ func _physics_process(delta: float) -> void:
 	var angle_x = atan2(height_difference, horizontal_distance)
 	global_rotation.y = angle_y
 	global_rotation.x = angle_x
-	
