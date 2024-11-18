@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://bygaenv1mocd"]
+[gd_scene load_steps=17 format=3 uid="uid://bygaenv1mocd"]
 
 [ext_resource type="Texture2D" uid="uid://bux46v0l8h3v" path="res://assets/textures/track.png" id="1_skapx"]
 [ext_resource type="PackedScene" uid="uid://d04nf8g18nl8i" path="res://track/straight.tscn" id="2_k80s0"]
 [ext_resource type="Script" path="res://engine/train.gd" id="3_oxtjv"]
 [ext_resource type="PackedScene" uid="uid://syxvvl0wtx0d" path="res://track/curve.tscn" id="3_tcrg8"]
+[ext_resource type="Script" path="res://engine/wheel.gd" id="4_rfreo"]
 [ext_resource type="PackedScene" uid="uid://cc8orcvajin1w" path="res://assets/Models/FBX format/train-diesel-a.fbx" id="5_5nlb3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lbsai"]
@@ -25,7 +26,13 @@ albedo_texture = ExtResource("1_skapx")
 uv1_scale = Vector3(2, 2, 2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_s8k1f"]
-size = Vector3(1.2, 0.8, 0.5)
+size = Vector3(1.2, 0.8, 3.66)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8pfsl"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_u7das"]
+size = Vector3(0.1, 0.1, 0.1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5tihv"]
 sky_top_color = Color(0.675969, 0.306514, 0.90577, 1)
@@ -42,16 +49,9 @@ sky_material = SubResource("ProceduralSkyMaterial_5tihv")
 background_mode = 2
 sky = SubResource("Sky_gr5dh")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8pfsl"]
-albedo_color = Color(1, 0, 1, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_u7das"]
-size = Vector3(0.1, 0.1, 0.1)
-
 [node name="Node3D" type="Node3D"]
 
 [node name="Ground" type="MeshInstance3D" parent="."]
-visible = false
 mesh = SubResource("PlaneMesh_0cb86")
 
 [node name="TestTrack(Path)" type="Node3D" parent="."]
@@ -125,30 +125,43 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -7.9, 
 [node name="Curve5" parent="TestTrack(Pieces)" instance=ExtResource("3_tcrg8")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 2)
 
-[node name="TestTrain" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.5)
-script = ExtResource("3_oxtjv")
-train_height = 0.8
+[node name="TrainGroup" type="Node3D" parent="."]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="TestTrain"]
+[node name="TestTrain" type="Node3D" parent="TrainGroup" node_paths=PackedStringArray("front_wheel", "back_wheel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -2.7)
+script = ExtResource("3_oxtjv")
+front_wheel = NodePath("../FrontWheel")
+back_wheel = NodePath("../BackWheel")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TrainGroup/TestTrain"]
 transform = Transform3D(1, 0, 0, 0, 0.6, 0, 0, 0, 0.7, 0, 0, 0)
 visible = false
 mesh = SubResource("BoxMesh_s8k1f")
 
-[node name="train-diesel-a" parent="TestTrain" instance=ExtResource("5_5nlb3")]
+[node name="train-diesel-a" parent="TrainGroup/TestTrain" instance=ExtResource("5_5nlb3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-visible = false
 
-[node name="CameraPivot" type="Node3D" parent="TestTrain"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2)
-
-[node name="Camera3D" type="Camera3D" parent="TestTrain/CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1, 2)
-environment = SubResource("Environment_g35y3")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="TestTrain/CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.780474, 0.625188, 0, -0.625188, 0.780474, 0, 1.47797, 3.77713)
-
-[node name="DebugNode" type="MeshInstance3D" parent="."]
+[node name="DebugNode" type="MeshInstance3D" parent="TrainGroup"]
 material_override = SubResource("StandardMaterial3D_8pfsl")
 mesh = SubResource("BoxMesh_u7das")
+skeleton = NodePath("../..")
+
+[node name="FrontWheel" type="Node3D" parent="TrainGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -3.7)
+script = ExtResource("4_rfreo")
+showDebugNode = true
+
+[node name="BackWheel" type="Node3D" parent="TrainGroup"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.6)
+script = ExtResource("4_rfreo")
+showDebugNode = true
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(-0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, -0.906308, 8, 2.5, -8.8)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(0.996195, 0.0435779, -0.0754791, 0, 0.866025, 0.5, 0.0871557, -0.498097, 0.86273, -4.76837e-07, 1, 2)
+environment = SubResource("Environment_g35y3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.780474, 0.625188, 0, -0.625188, 0.780474, 0, 1.47797, 3.77713)
