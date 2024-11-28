@@ -41,11 +41,12 @@ sky_material = SubResource("ProceduralSkyMaterial_5tihv")
 background_mode = 2
 sky = SubResource("Sky_gr5dh")
 
-[node name="Node3D" type="Node3D" node_paths=PackedStringArray("track_container", "camera", "play_controls")]
+[node name="Node3D" type="Node3D" node_paths=PackedStringArray("track_container", "camera", "play_controls", "train")]
 script = ExtResource("1_dpqds")
 track_container = NodePath("TrackContainer")
 camera = NodePath("Camera")
 play_controls = NodePath("PlayControls")
+train = NodePath("TrainGroup")
 
 [node name="Ground" type="MeshInstance3D" parent="."]
 visible = false

@@ -45,14 +45,18 @@ func sampleTrackPiece(delta: float) -> TrackPiece:
 	query.hit_from_inside = true
 	# We look for the next track an extra move ahead
 	query.from = global_position
-	query.to = query.from + Vector3(0, -1, 0)
+	query.to = query.from + Vector3(0, -5, 0)
 	# Exclude our recent track
 	query.exclude = last_track_rids
 	var result = space.intersect_ray(query)
 	if result.has_all(["collider"]):
+		print(result["collider"])
 		var area = result["collider"]
 		var track = area.get_parent_node_3d()
+		while track and track is not TrackPiece:
+			track = track.get_parent_node_3d()
 		if track and track is TrackPiece:
+			print(track)
 			#recordLastTrackRID(track.getAreaRID())
 			return track
 	return null
